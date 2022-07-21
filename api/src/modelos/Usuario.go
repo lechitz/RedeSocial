@@ -49,7 +49,7 @@ func (usuario *Usuario) validar() error {
 }
 
 func (usuario *Usuario) formatar() {
-	//Retira os espaços das extremidades
+	//Retirando os espaços das extremidades
 	usuario.Nome = strings.TrimSpace(usuario.Nome)
 	usuario.Nick = strings.TrimSpace(usuario.Nick)
 	usuario.Email = strings.TrimSpace(usuario.Email)

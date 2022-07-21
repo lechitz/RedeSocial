@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 //Contém as funções de usuários
@@ -52,9 +53,26 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request){
 	respostas.JSON(w, http.StatusCreated, usuario)
 }
 
-//Buscando por todos os usuários
+//BuscarUsuarios: por todos os usuários
 func BuscarUsuarios(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte("Buscando todos os usuários."))
+	//Armazenando em nomeOuNick tudo que estiver na query da rota
+	nomeOuNick := strings.ToLower(r.URL.Query().Get("usuario"))
+
+	db, erro := banco.Conectar()
+	if erro != nil {
+		respostas.Erro(w, http.StatusInternalServerError, erro)
+		return
+	}
+	defer db.Close()
+
+	repositorio := repositorios.NovoRepositorioDeUsuarios(db)
+	usuarios, erro := repositorio.Buscar(nomeOuNick)
+	if erro != nil {
+		respostas.Erro(w, http.StatusInternalServerError, erro)
+		return
+	}
+
+	respostas.JSON(w, http.StatusOK, usuarios)
 }
 
 //Buscando usuário específico
