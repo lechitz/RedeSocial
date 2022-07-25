@@ -17,6 +17,7 @@ type Rota struct {
 func Configurar(r *mux.Router) *mux.Router {
 	//Chamo os routers vazios
 	rotas := rotasUsuarios
+	rotas = append(rotas, rotaLogin)
 
 	//Crio o range para setar todos os routers (URI, função e método)
 	for _, rota := range rotas {
